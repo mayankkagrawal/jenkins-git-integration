@@ -2,7 +2,6 @@ pipeline {
   agent any
   environment{
     PATH="/opt/maven/bin:$PATH"
-    PATH="/opt/sonar/bin/sonar-scanner"
   }
   stages {
     stage ("git checkout"){
@@ -16,8 +15,10 @@ pipeline {
         }
       }
     stage('sonar qube'){
-        sh "${sonnar_home}/bin/sonar-scanner -Dsonar.projectKey=mykey -D sonar.projectKey=github-jenkins-sonar -D sonar.sources=./src"
+      steps {
+        sh "/opt/sonar/bin/sonar-scanner -Dsonar.projectKey=mykey -D sonar.projectKey=github-jenkins-sonar -D sonar.sources=./src"
         }
+    }
     stage ("store artficat"){
       steps {
          nexusPublisher nexusInstanceId: '1234', nexusRepositoryId: 'releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'target/jenkins-git-integration.war']], mavenCoordinate: [artifactId: 'jenkins-git-integration', groupId: 'com.amitverma', packaging: 'war', version: '1.0']]]
