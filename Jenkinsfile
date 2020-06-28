@@ -26,10 +26,7 @@ pipeline {
       }
     }
     stage("deploy"){
-      steps {
-        when ("${env.WORKSPACE} != target/jenkins-git-integration.war") {
-              echo 'Only on master branch.'
-             }     
+      steps {   
           sh label: '', script: 'sudo docker cp target/jenkins-git-integration.war maven:/opt/tomcat/webapps'
         }
       }
