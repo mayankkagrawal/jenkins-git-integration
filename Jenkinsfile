@@ -6,9 +6,6 @@ pipeline {
   stages {
     stage ("git checkout"){
         steps {
-          when (BRANCH_NAME != 'master') {
-            echo 'Only on master branch.'
-              }
             git credentialsId: 'e8304eb8-7cb5-4b14-99e4-8e5c286c9acc', url: 'https://github.com/mayankkagrawal/jenkins-git-integration'
            }
         }
@@ -29,7 +26,10 @@ pipeline {
     }
     stage("deploy"){
       steps {
-                sh label: '', script: 'sudo docker cp target/jenkins-git-integration.war maven:/opt/tomcat/webapps'
+           when (WORKSPACE != 'target/jenkins-git-integration.war') {
+              echo 'Only on master branch.'
+             }     
+          sh label: '', script: 'sudo docker cp target/jenkins-git-integration.war maven:/opt/tomcat/webapps'
         }
       }
      }
