@@ -2,6 +2,7 @@ pipeline {
   agent any
   environment{
     PATH="/opt/maven/bin:$PATH"
+    
   }
   stages {
     stage ("git checkout"){
@@ -26,7 +27,7 @@ pipeline {
     }
     stage("deploy"){
       steps {
-           when (WORKSPACE != 'target/jenkins-git-integration.war') {
+        when ("${env.WORKSPACE} != target/jenkins-git-integration.war") {
               echo 'Only on master branch.'
              }     
           sh label: '', script: 'sudo docker cp target/jenkins-git-integration.war maven:/opt/tomcat/webapps'
