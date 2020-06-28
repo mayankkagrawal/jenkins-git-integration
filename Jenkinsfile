@@ -7,8 +7,10 @@ pipeline {
   stages {
     stage ("git checkout"){
         steps {
+          when (BRANCH_NAME!='master'){
             git credentialsId: 'e8304eb8-7cb5-4b14-99e4-8e5c286c9acc', url: 'https://github.com/mayankkagrawal/jenkins-git-integration'
-           }
+            } 
+          }
         }
     stage ("Maven build"){
         steps {
